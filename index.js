@@ -1,36 +1,27 @@
 // Directives
 "use strict";
+
 // Imports
-import WebSocket from "ws";
-// Server Objects
-const client = new WebSocket("wss://websocket-echo.com");
-// Server Scope Variables
-let pingInterval;
-let pongCount = 0;
+import { WebSocket, WebSocketServer } from "ws";
+
+// Server Object
+const wsServer = new WebSocketServer({port: 8080});
+
 // Event Listeners
-client.onclose = (close) =>
+wsServer.on("listening", () =>
 {
-console.log(`Connection closed: ${close.reason} - Was clean: ${close.wasClean}`);
-};
-client.onmessage = (msg) =>
-{
-console.log(`Recv: ${msg.data}`);
-};
-client.onopen = () =>
-{
-console.log(`Connection opened!`);
-};
-client.on("pong", () =>
-{
-console.log(`Ponged ${++pongCount}`);
+    console.log("WebSocket Server listening...");
 });
-// Script
-pingInterval = setInterval(() =>
+wsServer.on("connection", (sock) =>
 {
-client.ping();
-}, 2000);
-setTimeout(() =>
-{
-clearInterval(pingInterval);
-client.close(1000, "Work complete.");
-}, 10000);
+    console.log("Client connected...");
+    
+    sock.on("ping", (data) =>
+    {
+        console.log(`Received: ${data}`);
+    });
+    sock.on("close", () =>
+    {
+        console.log("Client disconnected...");
+    })
+});
