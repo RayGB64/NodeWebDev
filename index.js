@@ -1,49 +1,50 @@
 // Directives
 "use strict";
-// Namespace
-const chatClientNS = (() =>
-{
-// References
-    const formMsg = document.getElementById("form-message");
-    const msgField = document.getElementById("form-message").elements["message"];
-    const nameField = document.getElementById("form-message").elements["name"];
-    const msgBox = document.getElementById("simple-messagebox");
+// Imports
+import { WebSocket, WebSocketServer } from "ws";
+// Consts
+const port = 8080;
 // Object
-    const ws = new WebSocket("ws://127.0.0.1:8080");
-// Events
-    ws.addEventListener("close", (clsEvnt) =>
+const wsServer = new WebSocketServer( {port: port} );
+
+wsServer.on("error", (err) =>
+{
+    console.error(`Server encountered an error: ${err}`);
+});
+
+wsServer.on("listening", () =>
+{
+    console.log(`Server started successfully at port: ${port}`);
+});
+
+wsServer.on("connection", (sock) =>
+{
+    console.log("New client connected!");
+    // Client Events
+    sock.on("close", (code, reason) =>
     {
-        msgBox.innerHTML += `<em>Closed with code: <strong>${clsEvnt.code}</strong> and status:
-        <strong>${clsEvnt.reason}</strong></em><br>`;
+        console.log(`Client has disconnected with code: ${code} and reason: ${reason}`);
     });
-    ws.addEventListener("error", (event) =>
+    
+    sock.on("message", (msgData) =>
     {
-        msgBox.innerHTML += `<em>Error <strong>has occured</strong></em><br>`;
-    });
-    ws.addEventListener("message", (msgEvnt) =>
-    {
-// Local Const
-        const message = JSON.parse(msgEvnt.data);
-        msgBox.innerHTML += `<time>${message.timestamp}</time> - ${message.name}:
-        ${message.message}<br>`;
-    });
-    ws.addEventListener("open", () =>
-    {
-        msgBox.innerHTML += `<em>Connected!</em><br>`;
-    });
-    formMsg.addEventListener("submit", (submitEvnt) =>
-    {
-// Local Const
-        const jsonPayload =
+        // Local Variables
+        let jsonMsg;
+        let broadcastPayload;
+        // Parsing
+        msgData = msgData.toString();
+        jsonMsg = JSON.parse(msgData);
+        // Add server timestamp
+        jsonMsg.timestamp = new Date().toLocaleString("en-GB");
+        // Prep for broadcast
+        broadcastPayload = JSON.stringify(jsonMsg);
+        // Broadcoast: https://github.com/websockets/ws/tree/master#server-broadcast
+        wsServer.clients.forEach((client) =>
         {
-            "name" : nameField.value,
-            "message" : msgField.value
-        };
-// Prevent Default Behaviour (submitting a form, see URL with/without)
-        submitEvnt.preventDefault();
-// Make use of the string data param
-        ws.send(JSON.stringify(jsonPayload));
+            if(client.readyState === WebSocket.OPEN)
+            {
+                client.send(broadcastPayload);
+            }
+        });
     });
-// Script Start
-    msgBox.innerHTML += "<em>Loading...</em><br>";
-})()
+});
