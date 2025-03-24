@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2024 Staffordshire University - All Rights Reserved
+-->
+<html lang="en">
+    <head>
+        <title>WhysApp</title>
+        <!-- Meta Data -->
+        <meta charset="UTF-8" />
+        <meta name="author" content="Luke Emery">
+        <meta name="copyright" content="Staffordshire University">
+        <meta name="description" content="Chat">
+    </head>
+    <body>
+    <header>
+        <h1>WhysApp Chat Client: Chat with friends!</h1>
+    </header>
+        <main>
+        <form id="form-message">
+            <fieldset>
+                <label for="name">Name:</label>
+                <br>
+                <input id="name" name="name" type="text"/>
+            </fieldset>
+            <fieldset>
+                <label for="message">Message:</label>
+                <br>
+                <textarea id="message" name="message"></textarea>
+            </fieldset>
+            <fieldset>
+                <input id="send-btn" type="submit" value="Send"/>
+            </fieldset>
+        </form>
+        <p id="simple-messagebox"></p>
+        </main>
+        <script src="scripts/index.js" type="application/ecmascript"></script>
+    </body>
+</html>
