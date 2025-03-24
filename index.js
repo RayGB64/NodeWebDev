@@ -1,19 +1,36 @@
 // Directives
 "use strict";
 // Imports
-import * as http from "http";
-// Constants
-const port = 8080;
+import WebSocket from "ws";
 // Server Objects
-const server = http.createServer((req,res) =>
+const client = new WebSocket("wss://websocket-echo.com");
+// Server Scope Variables
+let pingInterval;
+let pongCount = 0;
+// Event Listeners
+client.onclose = (close) =>
 {
-    // Local Consts
-    const usrAddr = req.socket.remoteAddress;
-    const usrPort = req.socket.remotePort;
-    res.end(`User IP: ${usrAddr} | User Port: ${usrPort}`);
+console.log(`Connection closed: ${close.reason} - Was clean: ${close.wasClean}`);
+};
+client.onmessage = (msg) =>
+{
+console.log(`Recv: ${msg.data}`);
+};
+client.onopen = () =>
+{
+console.log(`Connection opened!`);
+};
+client.on("pong", () =>
+{
+console.log(`Ponged ${++pongCount}`);
 });
 // Script
-server.listen(port, () =>
+pingInterval = setInterval(() =>
 {
-    console.log(`Listening @ ${port}`);
-});
+client.ping();
+}, 2000);
+setTimeout(() =>
+{
+clearInterval(pingInterval);
+client.close(1000, "Work complete.");
+}, 10000);
