@@ -1,27 +1,35 @@
 // Directives
 "use strict";
-
 // Imports
-import { WebSocket, WebSocketServer } from "ws";
-
-// Server Object
-const wsServer = new WebSocketServer({port: 8080});
+import { WebSocket } from "ws";
+// Objects
+const sock = new WebSocket("ws://127.0.0.1:8080");
+// Consts
+const pingMSInterval = 1000;
 
 // Event Listeners
-wsServer.on("listening", () =>
+sock.on("close", (code, buff) =>
 {
-    console.log("WebSocket Server listening...");
+    console.log(`Connection Closed!\nCode: ${code}\nReason: ${buff}`);
 });
-wsServer.on("connection", (sock) =>
+
+sock.on("open", () =>
 {
-    console.log("Client connected...");
-    
-    sock.on("ping", (data) =>
-    {
-        console.log(`Received: ${data}`);
-    });
-    sock.on("close", () =>
-    {
-        console.log("Client disconnected...");
-    })
+    console.log("Connection Opened!");
 });
+
+sock.on("pong" , (data) =>
+{
+    console.log(`Received: ${data}`);
+});
+
+sock.on("error", (err) =>
+{
+    console.error(err);
+});
+
+// Script
+setInterval(() =>
+{
+    sock.ping("ping", true);
+}, pingMSInterval);
