@@ -134,9 +134,10 @@ mqttMSubscriber.on("message", (topic, message) => //MQTT sending message to user
 {
     // Compile message to broadcast
     // This code shares the arrival time of the next train into the established protocol
+    
     const data =
     {
-         msgType : "dat",
+        msgType : "dat",
         payload:
         {
             msg: JSON.parse(message)[0].expectedArrival,
