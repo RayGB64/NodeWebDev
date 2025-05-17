@@ -1,38 +1,45 @@
 <!DOCTYPE html>
-<!--
-    Copyright (c) 2024 Staffordshire University - All Rights Reserved
--->
-<html lang="en">
+<html>
     <head>
-        <title>WhysApp</title>
-        <!-- Meta Data -->
         <meta charset="UTF-8" />
-        <meta name="author" content="Luke Emery">
-        <meta name="copyright" content="Staffordshire University">
-        <meta name="description" content="Chat">
+        <title>Choo Choo COMP50017</title>
     </head>
     <body>
-    <header>
-        <h1>WhysApp Chat Client: Chat with friends!</h1>
-    </header>
+        <header>
+        <h1>Train Spotter</h1>
+        </header>
+
         <main>
-        <form id="form-message">
-            <fieldset>
-                <label for="name">Name:</label>
-                <br>
-                <input id="name" name="name" type="text"/>
-            </fieldset>
-            <fieldset>
-                <label for="message">Message:</label>
-                <br>
-                <textarea id="message" name="message"></textarea>
-            </fieldset>
-            <fieldset>
-                <input id="send-btn" type="submit" value="Send"/>
-            </fieldset>
-        </form>
-        <p id="simple-messagebox"></p>
+            <form id="sub-form">
+                <fieldset>
+                    <label for="naptan-sub">Subscribe to NaPTAN Code</label>
+                    <select id="naptan-sub" name="naptan-sub">
+                        <option value="940GZZLUKSX">Kings Cross</option>
+                        <option value="940GZZLURSQ">Russel Square</option>
+                        <option value="940GZZLUHBN">Holborn</option>
+                        <option value="940GZZLUCGN">Covent Garden</option>
+                        <option value="940GZZLULSQ">Leicester Square</option>
+                        <option value="940GZZLUPCC">Piccadilly Circus</option>
+                    </select>
+                </fieldset>
+                <input type="submit" value="subscribe"></input>
+            </form>
+            <form id="unsub-form">
+                <fieldset>
+                    <label for="naptan-unsub">Unsubscribe from NaPTAN Code</label>
+                    <select id="naptan-unsub" name="naptan-unsub">
+                        <option value="940GZZLUKSX">Kings Cross</option>
+                        <option value="940GZZLURSQ">Russel Square</option>
+                        <option value="940GZZLUHBN">Holborn</option>
+                        <option value="940GZZLUCGN">Covent Garden</option>
+                        <option value="940GZZLULSQ">Leicester Square</option>
+                        <option value="940GZZLUPCC">Piccadilly Circus</option>
+                    </select>
+                </fieldset>
+                <input type="submit" value="unsubscribe"></input>
+            </form>
+            <p id="status-box"></p>
         </main>
-        <script src="scripts/index.js" type="application/ecmascript"></script>
+        <script type="text/javascript" src="index.js"></script>
     </body>
 </html>
