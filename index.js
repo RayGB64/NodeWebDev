@@ -14,6 +14,9 @@ const ns_client = (() =>
     /* Client Init */
     const sock = new WebSocket("ws://127.0.0.1")
 
+    /* Interval list */
+    let IntervalList = [];
+
     /* Script Start */
     statusBox.innerHTML += `Loading...<br>`;
 
@@ -85,14 +88,9 @@ const ns_client = (() =>
                 break;
             case "dat":
                 console.log("Interval Received")
-                setInterval(() => {
-                    if (statusBox.innerHTML.trim() !== "") {
-                        statusBox.innerHTML = "";
-                    }
-                    statusBox.innerHTML += `Train arriving Interval: <br>`;
-                    statusBox.innerHTML += `Train ID: ${message.payload.topic} Time:${message.payload.msg} <br>`;
-                    console.log("Interval Completed")
-                }, 180000);
+                statusBox.innerHTML += `Train arriving Interval: <br>`;
+                statusBox.innerHTML += `Train ID: ${message.payload.topic} Time:${message.payload.msg} <br>`;
+                console.log("Interval Completed")
                 break;
             default:
                 break;
