@@ -119,7 +119,6 @@ const ns_client = (() =>
                             statusBox.innerHTML += `The site is updating with train times... <br>`; 
                             clear = 'false';
                         };
-                    
                     break;
                 };
             default:
