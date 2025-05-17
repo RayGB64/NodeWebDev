@@ -27,7 +27,8 @@ const ns_client = (() =>
             payload:
             {
                 msg: "sub",
-                topic: subNaptan.value
+                topic: subNaptan.value,
+                name: subNaptan.name
             }
         }
 
@@ -47,7 +48,8 @@ const ns_client = (() =>
             payload:
             {
                 msg: "unsub",
-                topic: unsubNaptan.value
+                topic: unsubNaptan.value,
+                name: unsubNaptan.name
             }
         }
 
@@ -75,10 +77,10 @@ const ns_client = (() =>
                 switch(message.payload.msg)
                 {
                     case "sub":
-                        statusBox.innerHTML += `Subscribed to ${message.payload.topic}<br>`;
+                        statusBox.innerHTML += `Subscribed to ${message.payload.topic} / ${message.payload.name} <br>`;
                         break;
                     case "unsub":
-                        statusBox.innerHTML += `Unsubscribed from ${message.payload.topic}<br>`;
+                        statusBox.innerHTML += `Unsubscribed from ${message.payload.topic} / ${message.payload.name} <br>`;
                         break;
                 }
 
