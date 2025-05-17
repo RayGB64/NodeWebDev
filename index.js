@@ -7,9 +7,9 @@ const ns_client = (() =>
     /* References */
     const statusBox = document.getElementById("status-box");
     const subForm = document.getElementById("sub-form");
-    const subNaptan = document.getElementById("sub-form").elements["naptan-sub"];
+    const subTrain = document.getElementById("sub-form").elements["Train-sub"];
     const unsubForm = document.getElementById("unsub-form");
-    const unsubNaptan = document.getElementById("unsub-form").elements["naptan-unsub"];
+    const unsubTrain = document.getElementById("unsub-form").elements["Train-unsub"];
 
     /* Client Init */
     const sock = new WebSocket("ws://127.0.0.1")
@@ -27,8 +27,7 @@ const ns_client = (() =>
             payload:
             {
                 msg: "sub",
-                topic: subNaptan.value,
-                name: subNaptan.name
+                topic: subTrain.value,
             }
         }
 
@@ -48,8 +47,7 @@ const ns_client = (() =>
             payload:
             {
                 msg: "unsub",
-                topic: unsubNaptan.value,
-                name: unsubNaptan.name
+                topic: unsubTrain.value,
             }
         }
 
@@ -77,17 +75,24 @@ const ns_client = (() =>
                 switch(message.payload.msg)
                 {
                     case "sub":
-                        statusBox.innerHTML += `Subscribed to ${message.payload.topic} / ${message.payload.name} <br>`;
+                        statusBox.innerHTML += `Subscribed to ${message.payload.topic} <br>`;
                         break;
                     case "unsub":
-                        statusBox.innerHTML += `Unsubscribed from ${message.payload.topic} / ${message.payload.name} <br>`;
+                        statusBox.innerHTML += `Unsubscribed from ${message.payload.topic} <br>`;
                         break;
                 }
 
                 break;
             case "dat":
-                // Could push this to a div or a section based on payload.topic
-                statusBox.innerHTML += `${message.payload.topic}:${message.payload.msg}<br>`;
+                console.log("Interval Received")
+                setInterval(() => {
+                    if (statusBox.innerHTML.trim() !== "") {
+                        statusBox.innerHTML = "";
+                    }
+                    statusBox.innerHTML += `Train arriving Interval: <br>`;
+                    statusBox.innerHTML += `Train ID: ${message.payload.topic} Time:${message.payload.msg} <br>`;
+                    console.log("Interval Completed")
+                }, 180000);
                 break;
             default:
                 break;
