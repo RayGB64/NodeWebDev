@@ -16,6 +16,7 @@ const ns_client = (() =>
 
     /* Interval list */
     let IntervalList = [];
+    let clear = 'false';
 
     /* Script Start */
     statusBox.innerHTML += `Loading...<br>`;
@@ -79,19 +80,47 @@ const ns_client = (() =>
                 {
                     case "sub":
                         statusBox.innerHTML += `Subscribed to ${message.payload.topic} <br>`;
+                        IntervalList.push(`${message.payload.topic}`);
                         break;
+
                     case "unsub":
                         statusBox.innerHTML += `Unsubscribed from ${message.payload.topic} <br>`;
+
+                        const index = IntervalList.findIndex(item => item.name === `${message.payload.topic}`);
+
+                        // If found, remove it using splice
+                        if (index !== -1) {
+                          items.splice(index, 1);
+                        }
                         break;
                 }
 
                 break;
             case "dat":
-                console.log("Interval Received")
-                statusBox.innerHTML += `Train arriving Interval: <br>`;
-                statusBox.innerHTML += `Train ID: ${message.payload.topic} Time:${message.payload.msg} <br>`;
-                console.log("Interval Completed")
-                break;
+                console.log("Arrived");
+                console.log(clear);
+                if (clear == 'false') {
+                    console.log("Interval Received");
+                    statusBox.innerHTML += `Train ID: ${message.payload.topic} Time:${message.payload.msg} <br>`;
+                    const isLast = IntervalList.at(-1);
+                    console.log(`${isLast}`);
+                    console.log(`${message.payload.topic}`);
+                    if (isLast == `${message.payload.topic}`) {
+                        clear = 'true';
+                    }
+                    break;
+                } else if (clear == 'true') {
+                    console.log("Else if");
+                    const Inter = setInterval(() => {
+                        if (statusBox.innerHTML.trim() !== "") {
+                            statusBox.innerHTML = "";
+                            statusBox.innerHTML += `The site is updating with train times... <br>`; 
+                            clear = 'false';
+                            clearInterval(Inter);
+                        };
+                    }, 180000); //Pauses for 3 minutes before uploading next
+                    break;
+                };
             default:
                 break;
         }
